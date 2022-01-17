@@ -8,6 +8,7 @@ exports.signup = (req, res, next) => {
 	if (!emailValidator.validate(req.body.email)) {
 		return res.status(422).json({
 			message: 'Invalid Email Format. Email must be as "a@a.aa"',
+			errorField: 'Email'
 		});
 	}
 
@@ -15,6 +16,7 @@ exports.signup = (req, res, next) => {
 		if (user) {
 			return res.status(409).json({
 				message: 'Email already exists',
+				errorField: 'Email'
 			});
 		}
 
@@ -32,6 +34,7 @@ exports.signup = (req, res, next) => {
 				.catch((err) => {
 					res.status(500).json({
 						message: 'Sorry! User could not be created!',
+						errorField: 'Form'
 					});
 				});
 		});
