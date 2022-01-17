@@ -8,7 +8,7 @@ exports.signup = (req, res, next) => {
 	if (!emailValidator.validate(req.body.email)) {
 		return res.status(422).json({
 			message: 'Invalid Email Format. Email must be as "a@a.aa"',
-			errorField: 'Email'
+			errorField: 'Email',
 		});
 	}
 
@@ -16,7 +16,7 @@ exports.signup = (req, res, next) => {
 		if (user) {
 			return res.status(409).json({
 				message: 'Email already exists',
-				errorField: 'Email'
+				errorField: 'Email',
 			});
 		}
 
@@ -34,7 +34,7 @@ exports.signup = (req, res, next) => {
 				.catch((err) => {
 					res.status(500).json({
 						message: 'Sorry! User could not be created!',
-						errorField: 'Form'
+						errorField: 'Form',
 					});
 				});
 		});
@@ -49,15 +49,23 @@ exports.login = (req, res, next) => {
 			if (!user) {
 				return res.status(404).json({
 					message: 'Email not found!',
+					errorField: 'Email',
 				});
 			}
 			fetchedUser = user;
 			return bcrypt.compare(req.body.password, user.password);
 		})
 		.then((passwordMatched) => {
+			if (!fetchedUser) {
+				// when no user exists with provided email, response from above
+				// 'then' block gets returned to this block which causes error
+				// because of no fetchedUser, to avoid that, just return
+				return;
+			}
 			if (!passwordMatched) {
 				return res.status(401).json({
 					message: 'Invalid password!',
+					errorField: 'Password',
 				});
 			}
 			const token = jwt.sign(
@@ -77,6 +85,7 @@ exports.login = (req, res, next) => {
 			console.log(err);
 			res.status(500).json({
 				message: 'Sorry! An unknown error occured while logging in!',
+				errorField: 'Form',
 			});
 		});
 };
