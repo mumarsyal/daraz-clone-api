@@ -1,0 +1,24 @@
+{
+  "name": "daraz-clone-api",
+  "version": "1.0.0",
+  "description": "APIs for Daraz Clone Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.1",
+    "dotenv": "^14.1.0",
+    "email-validator": "^2.0.4",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.6",
+    "mongoose-unique-validator": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
