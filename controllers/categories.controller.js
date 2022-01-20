@@ -40,8 +40,34 @@ const addCategory = (req, res, next) => {
 	});
 };
 
+const getCategories = (req, res, next) => {
+	const query = Category.find();
+	let categories;
+
+	query
+		.then((results) => {
+			categories = results;
+			return Category.count();
+		})
+		.then((count) => {
+			res.status(200).json({
+				message: 'Categories fetched successfully!',
+				categories: categories,
+				totalCategories: count,
+			});
+		})
+		.catch((error) => {
+			console.log('Categories fetching failed:');
+			console.log(error);
+			res.status(500).json({
+				message: "Sorry! Categories couldn't be fetched. Please try again.",
+			});
+		});
+};
+
 const categoriesControllers = {
 	addCategory: addCategory,
+	getCategories: getCategories,
 };
 
 module.exports = categoriesControllers;
