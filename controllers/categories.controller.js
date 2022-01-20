@@ -41,8 +41,13 @@ const addCategory = (req, res, next) => {
 };
 
 const getCategories = (req, res, next) => {
+	const limit = +req.query.limit;
 	const query = Category.find();
 	let categories;
+
+	if (limit) {
+		query.limit(limit);
+	}
 
 	query
 		.then((results) => {
