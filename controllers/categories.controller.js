@@ -19,7 +19,7 @@ const addCategory = (req, res, next) => {
 		const url = req.protocol + '://' + req.get('host');
 		const category = new Category({
 			title: req.body.title,
-			imagePath: `${url}/${process.env.IMAGE_UPLOADS_FOLDER}/${req.file.filename}`,
+			imagePath: `${url}/${process.env.IMAGE_UPLOADS_FOLDER}/${req.files[0].filename}`,
 		});
 		category
 			.save()
