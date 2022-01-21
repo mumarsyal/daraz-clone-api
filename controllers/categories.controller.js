@@ -40,6 +40,25 @@ const addCategory = (req, res, next) => {
 	});
 };
 
+const getCategory = (req, res, next) => {
+	Category.findOne({ _id: req.params.id })
+		.then((result) => {
+			console.log('Category fetched successfully:');
+			console.log(result);
+			res.status(200).json({
+				message: 'Category fetched successfully!',
+				category: result,
+			});
+		})
+		.catch((error) => {
+			console.log('Category fetching failed:');
+			console.log(error);
+			res.status(500).json({
+				message: "Sorry! Category couldn't be fetched. Please try again.",
+			});
+		});
+};
+
 const getCategories = (req, res, next) => {
 	const limit = +req.query.limit;
 	const query = Category.find();
@@ -88,6 +107,7 @@ const deleteCategory = (req, res, next) => {
 
 const categoriesControllers = {
 	addCategory: addCategory,
+	getCategory: getCategory,
 	getCategories: getCategories,
 	deleteCategory: deleteCategory,
 };

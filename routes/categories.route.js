@@ -7,6 +7,7 @@ const authVerificationMiddleware = require('../middlewares/authVerification.midd
 
 router.post('', authVerificationMiddleware, categoriesController.addCategory);
 router.get('', categoriesController.getCategories);
+router.get('/:id', categoriesController.getCategory);
 router.delete(
 	'/:id',
 	authVerificationMiddleware,
