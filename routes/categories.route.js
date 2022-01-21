@@ -3,9 +3,14 @@ const express = require('express');
 const router = express.Router();
 
 const categoriesController = require('../controllers/categories.controller');
+const authVerificationMiddleware = require('../middlewares/authVerification.middleware');
 
-router.post('', categoriesController.addCategory);
+router.post('', authVerificationMiddleware, categoriesController.addCategory);
 router.get('', categoriesController.getCategories);
-router.delete('/:id', categoriesController.deleteCategory);
+router.delete(
+	'/:id',
+	authVerificationMiddleware,
+	categoriesController.deleteCategory
+);
 
 module.exports = router;
