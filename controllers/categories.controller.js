@@ -70,9 +70,26 @@ const getCategories = (req, res, next) => {
 		});
 };
 
+const deleteCategory = (req, res, next) => {
+	Category.deleteOne({ _id: req.params.id })
+		.then((result) => {
+			res.status(200).json({
+				message: 'Category deleted successfully!',
+			});
+		})
+		.catch((error) => {
+			console.log('Category deletion failed:');
+			console.log(error);
+			res.status(500).json({
+				message: "Sorry! Category couldn't be deleted. Please try again.",
+			});
+		});
+};
+
 const categoriesControllers = {
 	addCategory: addCategory,
 	getCategories: getCategories,
+	deleteCategory: deleteCategory,
 };
 
 module.exports = categoriesControllers;
