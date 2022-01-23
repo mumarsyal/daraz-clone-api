@@ -12,6 +12,7 @@ const productSchema = mongoose.Schema({
 	oldPrice: { type: Number, default: null },
 	colors: [{ type: String }],
 	features: [{ type: String, required: true }],
+	description: { type: String },
 	images: [{ type: String, required: true }],
 	sku: { type: String, required: true },
 	model: { type: String, required: true },
@@ -33,6 +34,16 @@ const productSchema = mongoose.Schema({
 			ref: 'Review',
 		},
 	],
+});
+
+productSchema.pre('find', function (next) {
+	this.populate('category').populate('seller');
+	next();
+});
+
+productSchema.pre('findOne', function (next) {
+	this.populate('category').populate('seller');
+	next();
 });
 
 module.exports = mongoose.model('Product', productSchema);

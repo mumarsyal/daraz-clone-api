@@ -18,10 +18,13 @@ const addProduct = (req, res, next) => {
 		// Everything went fine
 		const url = req.protocol + '://' + req.get('host');
 		let images = [];
-		for (const image of req.files) {
-			images.push(
-				`${url}/${process.env.IMAGE_UPLOADS_FOLDER}/${image.filename}`
-			);
+		for (const key in req.files) {
+			if (Object.hasOwnProperty.call(req.files, key)) {
+				const image = req.files[key];
+				images.push(
+					`${url}/${process.env.IMAGE_UPLOADS_FOLDER}/${image.filename}`
+				);
+			}
 		}
 
 		const product = new Product({
@@ -47,6 +50,7 @@ const addProduct = (req, res, next) => {
 				console.log(result);
 				res.status(201).json({
 					message: 'Product added successfully!',
+					product: result,
 				});
 			})
 			.catch((error) => {
