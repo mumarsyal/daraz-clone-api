@@ -81,14 +81,30 @@ const getProduct = (req, res, next) => {
 };
 
 const getProducts = (req, res, next) => {
+	let filters = [];
+	for (const key in req.query) {
+		if (
+			Object.hasOwnProperty.call(req.query, key) &&
+			key !== 'pageNum' &&
+			key !== 'pageSize'
+		) {
+			let filter = {};
+			filter[key] = req.query[key];
+			filters.push(filter);
+		}
+	}
+
+	const query = filters.length
+		? Product.find({ $or: filters })
+		: Product.find();
+
 	const pageNum = +req.query.pageNum;
 	const pageSize = +req.query.pageSize;
-	const query = Product.find();
-	let products;
-
 	if (pageNum && pageSize) {
 		query.skip(pageSize * (pageNum - 1)).limit(pageSize);
 	}
+
+	let products;
 
 	query
 		.then((results) => {
@@ -100,6 +116,7 @@ const getProducts = (req, res, next) => {
 				message: 'Products fetched successfully!',
 				products: products,
 				totalProducts: count,
+				fetchedProducts: products.length,
 			});
 		})
 		.catch((error) => {
