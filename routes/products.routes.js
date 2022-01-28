@@ -7,6 +7,7 @@ const authVerificationMiddleware = require('../middlewares/authVerification.midd
 
 router.post('', authVerificationMiddleware, productsController.addProduct);
 router.get('', productsController.getProducts);
+router.get('/brands', productsController.getBrands);
 router.get('/:id', productsController.getProduct);
 router.delete(
 	'/:id',

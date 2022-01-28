@@ -81,7 +81,10 @@ const getProduct = (req, res, next) => {
 };
 
 const getProducts = (req, res, next) => {
-	let filters = [];
+	let brandFilters = [];
+	let sellerFilters = [];
+	let categoryFilters = [];
+
 	for (const key in req.query) {
 		if (
 			Object.hasOwnProperty.call(req.query, key) &&
@@ -90,12 +93,64 @@ const getProducts = (req, res, next) => {
 		) {
 			let filter = {};
 			filter[key] = req.query[key];
-			filters.push(filter);
+
+			if (key === 'brand') {
+				if (Array.isArray(req.query[key])) {
+					for (const brand of req.query[key]) {
+						let filter = {};
+						filter[key] = brand;
+						brandFilters.push(filter);
+					}
+				} else {
+					let filter = {};
+					filter[key] = req.query[key];
+					brandFilters.push(filter);
+				}
+			}
+
+			if (key === 'seller') {
+				if (Array.isArray(req.query[key])) {
+					for (const seller of req.query[key]) {
+						let filter = {};
+						filter[key] = seller;
+						sellerFilters.push(filter);
+					}
+				} else {
+					let filter = {};
+					filter[key] = req.query[key];
+					sellerFilters.push(filter);
+				}
+			}
+
+			if (key === 'category') {
+				if (Array.isArray(req.query[key])) {
+					for (const category of req.query[key]) {
+						let filter = {};
+						filter[key] = category;
+						categoryFilters.push(filter);
+					}
+				} else {
+					let filter = {};
+					filter[key] = req.query[key];
+					categoryFilters.push(filter);
+				}
+			}
 		}
 	}
 
+	let filters = [];
+	if (brandFilters.length) {
+		filters.push({ $or: brandFilters });
+	}
+	if (sellerFilters.length) {
+		filters.push({ $or: sellerFilters });
+	}
+	if (categoryFilters.length) {
+		filters.push({ $or: categoryFilters });
+	}
+
 	const query = filters.length
-		? Product.find({ $or: filters })
+		? Product.find({ $and: filters })
 		: Product.find();
 
 	const pageNum = +req.query.pageNum;
@@ -144,11 +199,35 @@ const deleteProduct = (req, res, next) => {
 		});
 };
 
+const getBrands = (req, res, next) => {
+	Product.where('brand')
+		.ne(null)
+		.then((results) => {
+			let brands = [];
+			for (const product of results) {
+				brands.push(product.brand);
+			}
+			res.status(201).json({
+				message: 'Brands fetched successfully!',
+				brands: brands,
+				totalBrands: brands.length,
+			});
+		})
+		.catch((error) => {
+			console.log('Brands fetching failed:');
+			console.log(error);
+			res.status(500).json({
+				message: "Sorry! Brands couldn't be fetched. Please try again.",
+			});
+		});
+};
+
 const productsControllers = {
 	addProduct: addProduct,
 	getProduct: getProduct,
 	getProducts: getProducts,
 	deleteProduct: deleteProduct,
+	getBrands: getBrands,
 };
 
 module.exports = productsControllers;
