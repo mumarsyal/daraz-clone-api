@@ -27,9 +27,15 @@ const addProduct = (req, res, next) => {
 			}
 		}
 
+		if(!images.length) {
+			res.status(500).json({
+				message: "Product couldn't be added! Please try again.",
+			});
+		}
+
 		const product = new Product({
 			title: req.body.title,
-			thumbnail: `${url}/${process.env.IMAGE_UPLOADS_FOLDER}/${req.files[0].filename}`,
+			thumbnail: images[0],
 			brand: req.body.brand,
 			currentPrice: req.body.currentPrice,
 			oldPrice: req.body.oldPrice,
@@ -40,8 +46,8 @@ const addProduct = (req, res, next) => {
 			model: req.body.model,
 			material: req.body.material,
 			inTheBox: req.body.inTheBox,
-			category: req.body.categoryId,
-			seller: req.body.sellerId,
+			category: req.body.category,
+			seller: req.body.seller,
 		});
 		product
 			.save()
@@ -91,9 +97,6 @@ const getProducts = (req, res, next) => {
 			key !== 'pageNum' &&
 			key !== 'pageSize'
 		) {
-			let filter = {};
-			filter[key] = req.query[key];
-
 			if (key === 'brand') {
 				if (Array.isArray(req.query[key])) {
 					for (const brand of req.query[key]) {
@@ -203,13 +206,13 @@ const getBrands = (req, res, next) => {
 	Product.where('brand')
 		.ne(null)
 		.then((results) => {
-			let brands = [];
+			let brands = new Set();
 			for (const product of results) {
-				brands.push(product.brand);
+				brands.add(product.brand);
 			}
 			res.status(201).json({
 				message: 'Brands fetched successfully!',
-				brands: brands,
+				brands: [...brands],
 				totalBrands: brands.length,
 			});
 		})
