@@ -27,7 +27,7 @@ const addProduct = (req, res, next) => {
 			}
 		}
 
-		if(!images.length) {
+		if (!images.length) {
 			res.status(500).json({
 				message: "Product couldn't be added! Please try again.",
 			});
@@ -37,8 +37,8 @@ const addProduct = (req, res, next) => {
 			title: req.body.title,
 			thumbnail: images[0],
 			brand: req.body.brand,
-			currentPrice: req.body.currentPrice,
-			oldPrice: req.body.oldPrice,
+			currentPrice: +req.body.currentPrice,
+			oldPrice: req.body.oldPrice === 'null' ? null : +req.body.oldPrice,
 			colors: req.body.colors,
 			features: req.body.features,
 			images: images,
@@ -90,6 +90,7 @@ const getProducts = (req, res, next) => {
 	let brandFilters = [];
 	let sellerFilters = [];
 	let categoryFilters = [];
+	let sortBy = null;
 
 	for (const key in req.query) {
 		if (
@@ -138,6 +139,12 @@ const getProducts = (req, res, next) => {
 					categoryFilters.push(filter);
 				}
 			}
+
+			if (key === 'sort') {
+				req.query[key] =
+					req.query[key] === 'price' ? 'currentPrice' : req.query[key];
+				sortBy = req.query[key];
+			}
 		}
 	}
 
@@ -153,8 +160,8 @@ const getProducts = (req, res, next) => {
 	}
 
 	const query = filters.length
-		? Product.find({ $and: filters })
-		: Product.find();
+		? Product.find({ $and: filters }).sort(sortBy)
+		: Product.find().sort(sortBy);
 
 	const pageNum = +req.query.pageNum;
 	const pageSize = +req.query.pageSize;
