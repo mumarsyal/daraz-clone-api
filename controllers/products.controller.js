@@ -2,6 +2,7 @@ const multer = require('multer');
 
 const Product = require('../models/product.model');
 const fileUploadMiddleware = require('../middlewares/fileUpload.middleware');
+const Review = require('../models/review.model');
 
 const addProduct = (req, res, next) => {
 	fileUploadMiddleware(req, res, (err) => {
@@ -234,12 +235,56 @@ const getBrands = (req, res, next) => {
 		});
 };
 
+const addReview = (req, res, next) => {
+	const review = new Review({
+		reviewBy: req.body.reviewBy,
+		verifiedPurchase: req.body.verifiedPurchase,
+		comment: req.body.comment,
+		product: req.body.product,
+	});
+
+	Product.findById(req.body.product)
+		.then((product) => {
+			if (!product) {
+				return res.status(500).json({
+					message: "Review couldn't be added! Please try again.",
+				});
+			}
+			review
+				.save()
+				.then((result) => {
+					product.reviews.push(result._id);
+					product.save();
+					console.log('Review added successfully:');
+					console.log(result);
+					res.status(201).json({
+						message: 'Review added successfully!',
+					});
+				})
+				.catch((error) => {
+					console.log("Review couldn't be added:");
+					console.log(error);
+					res.status(500).json({
+						message: "Review couldn't be added! Please try again.",
+					});
+				});
+		})
+		.catch((error) => {
+			console.log("Review couldn't be added:");
+			console.log(error);
+			res.status(500).json({
+				message: "Review couldn't be added! Please try again.",
+			});
+		});
+};
+
 const productsControllers = {
 	addProduct: addProduct,
 	getProduct: getProduct,
 	getProducts: getProducts,
 	deleteProduct: deleteProduct,
 	getBrands: getBrands,
+	addReview: addReview,
 };
 
 module.exports = productsControllers;

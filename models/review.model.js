@@ -13,17 +13,17 @@ var reviewSchema = new mongoose.Schema({
 	},
 });
 
-reviewSchema.pre('save', function (next) {
-	this.reviewDate = randomDate();
-	next();
-});
+// reviewSchema.pre('save', function (next) {
+// 	this.reviewDate = randomDate();
+// 	next();
+// });
 
-function randomDate() {
-	const start = new Date(2021, 1, 1);
-	const end = new Date();
-	return new Date(
-		start.getTime() + Math.random() * (end.getTime() - start.getTime())
-	);
-}
+// function randomDate() {
+// 	const start = new Date(2021, 1, 1);
+// 	const end = new Date();
+// 	return new Date(
+// 		start.getTime() + Math.random() * (end.getTime() - start.getTime())
+// 	);
+// }
 
 module.exports = mongoose.model('Review', reviewSchema);

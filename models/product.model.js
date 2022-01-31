@@ -38,12 +38,12 @@ const productSchema = mongoose.Schema({
 });
 
 productSchema.pre('find', function (next) {
-	this.populate('category').populate('seller');
+	this.populate('category').populate('seller').populate('reviews');
 	next();
 });
 
 productSchema.pre('findOne', function (next) {
-	this.populate('category').populate('seller');
+	this.populate('category').populate('seller').populate('reviews');
 	next();
 });
 
