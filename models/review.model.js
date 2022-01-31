@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 var reviewSchema = new mongoose.Schema({
 	reviewBy: { type: String, required: true },
-	rating: { type: Number, default: Math.random() * 100 },
+	rating: { type: Number, default: () => Math.random() * 100 },
 	verifiedPurchase: { type: Boolean, default: false },
-	reviewDate: { type: Date },
+	reviewDate: { type: Date, default: Date.now },
 	comment: { type: String, required: true },
 	product: {
 		type: mongoose.Schema.Types.ObjectId,
