@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const productSchema = mongoose.Schema({
 	title: { type: String, required: true },
 	thumbnail: { type: String, required: true },
-	rating: { type: Number, default: () => Math.random() / 2 },
+	rating: { type: Number, default: () => Math.random() * 5 },
 	noOfRatings: { type: Number, default: () => Math.round(Math.random() * 100) },
 	noOfQuesAsked: { type: Number, default: 0 },
 	noOfQuesAnswered: { type: Number, default: 0 },
