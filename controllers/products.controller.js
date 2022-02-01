@@ -2,6 +2,7 @@ const multer = require('multer');
 
 const Product = require('../models/product.model');
 const fileUploadMiddleware = require('../middlewares/fileUpload.middleware');
+const Review = require('../models/review.model');
 
 const addProduct = (req, res, next) => {
 	fileUploadMiddleware(req, res, (err) => {
@@ -36,7 +37,7 @@ const addProduct = (req, res, next) => {
 		const product = new Product({
 			title: req.body.title,
 			thumbnail: images[0],
-			brand: req.body.brand,
+			brand: req.body.brand === 'null' ? null : req.body.brand,
 			currentPrice: +req.body.currentPrice,
 			oldPrice: req.body.oldPrice === 'null' ? null : +req.body.oldPrice,
 			freeShipping: req.body.freeShipping,
@@ -88,7 +89,7 @@ const getProduct = (req, res, next) => {
 		});
 };
 
-const getProducts = (req, res, next) => {
+const getProducts = async (req, res, next) => {
 	let brandFilters = [];
 	let sellerFilters = [];
 	let categoryFilters = [];
@@ -161,38 +162,38 @@ const getProducts = (req, res, next) => {
 		filters.push({ $or: categoryFilters });
 	}
 
-	const query = filters.length
+	const findQuery = filters.length
 		? Product.find({ $and: filters }).sort(sortBy)
 		: Product.find().sort(sortBy);
+
+	const countQuery = findQuery.clone().countDocuments();
 
 	const pageNum = +req.query.pageNum;
 	const pageSize = +req.query.pageSize;
 	if (pageNum && pageSize) {
-		query.skip(pageSize * (pageNum - 1)).limit(pageSize);
+		findQuery.skip(pageSize * (pageNum - 1)).limit(pageSize);
 	}
 
-	let products;
+	try {
+		const products = await findQuery.exec();
+		const totalProducts = await Product.count().exec();
+		const filteredProducts = await countQuery.exec();
+		const fetchedProducts = products.length;
 
-	query
-		.then((results) => {
-			products = results;
-			return Product.count();
-		})
-		.then((count) => {
-			res.status(200).json({
-				message: 'Products fetched successfully!',
-				products: products,
-				totalProducts: count,
-				fetchedProducts: products.length,
-			});
-		})
-		.catch((error) => {
-			console.log('Products fetching failed:');
-			console.log(error);
-			res.status(500).json({
-				message: "Sorry! Products couldn't be fetched. Please try again.",
-			});
+		res.status(200).json({
+			message: 'Products fetched successfully!',
+			products: products,
+			totalProducts: totalProducts,
+			filteredProducts: filteredProducts,
+			fetchedProducts: fetchedProducts,
 		});
+	} catch (error) {
+		console.log('Products fetching failed:');
+		console.log(error);
+		res.status(500).json({
+			message: "Sorry! Products couldn't be fetched. Please try again.",
+		});
+	}
 };
 
 const deleteProduct = (req, res, next) => {
@@ -234,12 +235,56 @@ const getBrands = (req, res, next) => {
 		});
 };
 
+const addReview = (req, res, next) => {
+	const review = new Review({
+		reviewBy: req.body.reviewBy,
+		verifiedPurchase: req.body.verifiedPurchase,
+		comment: req.body.comment,
+		product: req.body.product,
+	});
+
+	Product.findById(req.body.product)
+		.then((product) => {
+			if (!product) {
+				return res.status(500).json({
+					message: "Review couldn't be added! Please try again.",
+				});
+			}
+			review
+				.save()
+				.then((result) => {
+					product.reviews.push(result._id);
+					product.save();
+					console.log('Review added successfully:');
+					console.log(result);
+					res.status(201).json({
+						message: 'Review added successfully!',
+					});
+				})
+				.catch((error) => {
+					console.log("Review couldn't be added:");
+					console.log(error);
+					res.status(500).json({
+						message: "Review couldn't be added! Please try again.",
+					});
+				});
+		})
+		.catch((error) => {
+			console.log("Review couldn't be added:");
+			console.log(error);
+			res.status(500).json({
+				message: "Review couldn't be added! Please try again.",
+			});
+		});
+};
+
 const productsControllers = {
 	addProduct: addProduct,
 	getProduct: getProduct,
 	getProducts: getProducts,
 	deleteProduct: deleteProduct,
 	getBrands: getBrands,
+	addReview: addReview,
 };
 
 module.exports = productsControllers;

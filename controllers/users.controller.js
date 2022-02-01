@@ -1,13 +1,12 @@
 const bcrypt = require('bcryptjs');
-const emailValidator = require('email-validator');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user.model');
 
 exports.signup = (req, res, next) => {
-	if (!emailValidator.validate(req.body.email)) {
+	if (!req.body.email.match('[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}')) {
 		return res.status(422).json({
-			message: 'Invalid Email Format. Email must be as "a@a.aa"',
+			message: 'Invalid Email Format. Email must be as "john@doe.com"',
 			errorField: 'Email',
 		});
 	}

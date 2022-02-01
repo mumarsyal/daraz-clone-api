@@ -5,17 +5,17 @@ var sellerSchema = new mongoose.Schema({
 	positiveRatings: {
 		type: Number,
 		required: true,
-		default: Math.random() * 100,
+		default: () => Math.random() * 100,
 	},
 	shipOnTime: {
 		type: Number,
 		required: true,
-		default: Math.random() * 100,
+		default: () => Math.random() * 100,
 	},
 	chatResponse: {
 		type: Number,
 		required: true,
-		default: Math.random() * 100,
+		default: () => Math.random() * 100,
 	},
 	products: [
 		{

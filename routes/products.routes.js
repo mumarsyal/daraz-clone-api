@@ -14,5 +14,6 @@ router.delete(
 	authVerificationMiddleware,
 	productsController.deleteProduct
 );
+router.post('/reviews/new', productsController.addReview);
 
 module.exports = router;
