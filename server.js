@@ -41,14 +41,15 @@ const onError = (error) => {
 const onListening = () => {
 	const addr = server.address();
 	const bind = typeof port === 'string' ? 'pipe ' + port : 'port ' + port;
-	console.log(`Listening on http://${hostname}:${port}/`);
+	// console.log(`Listening on http://${hostname}:${port}/`);
 };
 
-const hostname = process.env.HOST || '127.0.0.1';
+// const hostname = process.env.HOST || '127.0.0.1';
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 const server = http.createServer(app);
 server.on('error', onError);
 server.on('listening', onListening);
-server.listen(port, hostname);
+// server.listen(port, hostname);
+server.listen(port);
