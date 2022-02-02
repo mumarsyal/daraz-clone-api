@@ -93,6 +93,7 @@ const getProducts = async (req, res, next) => {
 	let brandFilters = [];
 	let sellerFilters = [];
 	let categoryFilters = [];
+	let priceFilters = { currentPrice: {} };
 	let sortBy = null;
 
 	for (const key in req.query) {
@@ -148,6 +149,14 @@ const getProducts = async (req, res, next) => {
 					req.query[key] === 'price' ? 'currentPrice' : req.query[key];
 				sortBy = req.query[key];
 			}
+
+			if (key === 'minPrice') {
+				priceFilters.currentPrice['$gte'] = +req.query[key];
+			}
+
+			if (key === 'maxPrice') {
+				priceFilters.currentPrice['$lte'] = +req.query[key];
+			}
 		}
 	}
 
@@ -160,6 +169,9 @@ const getProducts = async (req, res, next) => {
 	}
 	if (categoryFilters.length) {
 		filters.push({ $or: categoryFilters });
+	}
+	if (priceFilters.currentPrice['$gte'] || priceFilters.currentPrice['$lte']) {
+		filters.push(priceFilters);
 	}
 
 	const findQuery = filters.length
