@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user.model');
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res) => {
 	if (!req.body.email.match('[A-Za-z0-9._%-]+@[A-Za-z0-9._%-]+\\.[a-z]{2,3}')) {
 		return res.status(422).json({
 			message: 'Invalid Email Format. Email must be as "john@doe.com"',
@@ -11,7 +11,7 @@ exports.signup = (req, res, next) => {
 		});
 	}
 
-	User.findOne({ email: req.body.email }).then((user) => {
+	return User.findOne({ email: req.body.email }).then((user) => {
 		if (user) {
 			return res.status(409).json({
 				message: 'Email already exists',
@@ -19,19 +19,19 @@ exports.signup = (req, res, next) => {
 			});
 		}
 
-		bcrypt.hash(req.body.password, 10).then((passwordHash) => {
-			const user = new User({
+		return bcrypt.hash(req.body.password, 10).then((passwordHash) => {
+			const newUser = new User({
 				email: req.body.email,
 				password: passwordHash,
 			});
-			user.save()
-				.then((user) => {
-					res.status(201).json({
+			return newUser.save()
+				.then(() => {
+					return res.status(201).json({
 						message: 'Congratulations! Account created!',
 					});
 				})
-				.catch((err) => {
-					res.status(500).json({
+				.catch(() => {
+					return res.status(500).json({
 						message: 'Sorry! User could not be created!',
 						errorField: 'Form',
 					});
@@ -40,7 +40,7 @@ exports.signup = (req, res, next) => {
 	});
 };
 
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
 	let fetchedUser;
 
 	User.findOne({ email: req.body.email })
@@ -62,7 +62,7 @@ exports.login = (req, res, next) => {
 				return;
 			}
 			if (!passwordMatched) {
-				return res.status(401).json({
+				res.status(401).json({
 					message: 'Invalid password!',
 					errorField: 'Password',
 				});
@@ -70,7 +70,7 @@ exports.login = (req, res, next) => {
 			const token = jwt.sign(
 				{ email: fetchedUser.email, userId: fetchedUser._id },
 				process.env.JWT_SECRET_KEY,
-				{ expiresIn: '1h' }
+				{ expiresIn: '1h' },
 			);
 			res.status(200).json({
 				message: 'Logged In',

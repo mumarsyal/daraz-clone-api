@@ -4,32 +4,32 @@ const Product = require('../models/product.model');
 const fileUploadMiddleware = require('../middlewares/fileUpload.middleware');
 const Review = require('../models/review.model');
 
-const addProduct = (req, res, next) => {
+const addProduct = (req, res) => {
 	fileUploadMiddleware(req, res, (err) => {
 		if (err instanceof multer.MulterError) {
 			return res.status(500).json({
 				message: 'Sorry! Image could not be uploaded. Please try again.',
 			});
-		} else if (err) {
+		} if (err) {
 			return res.status(422).json({
 				message: 'Invalid file type',
 			});
 		}
 
 		// Everything went fine
-		const url = req.protocol + '://' + req.get('host');
-		let images = [];
+		const url = `${req.protocol}://${req.get('host')}`;
+		const images = [];
 		for (const key in req.files) {
 			if (Object.hasOwnProperty.call(req.files, key)) {
 				const image = req.files[key];
 				images.push(
-					`${url}/${process.env.IMAGE_UPLOADS_FOLDER}/${image.filename}`
+					`${url}/${process.env.IMAGE_UPLOADS_FOLDER}/${image.filename}`,
 				);
 			}
 		}
 
 		if (!images.length) {
-			res.status(500).json({
+			return res.status(500).json({
 				message: "Product couldn't be added! Please try again.",
 			});
 		}
@@ -52,12 +52,12 @@ const addProduct = (req, res, next) => {
 			category: req.body.category,
 			seller: req.body.seller,
 		});
-		product
+		return product
 			.save()
 			.then((result) => {
 				console.log('Product added successfully:');
 				console.log(result);
-				res.status(201).json({
+				return res.status(201).json({
 					message: 'Product added successfully!',
 					product: result,
 				});
@@ -65,17 +65,17 @@ const addProduct = (req, res, next) => {
 			.catch((error) => {
 				console.log("Product couldn't be added:");
 				console.log(error);
-				res.status(500).json({
+				return res.status(500).json({
 					message: "Product couldn't be added! Please try again.",
 				});
 			});
 	});
 };
 
-const getProduct = (req, res, next) => {
+const getProduct = (req, res) => {
 	Product.findOne({ _id: req.params.id })
 		.then((result) => {
-			res.status(200).json({
+			return res.status(200).json({
 				message: 'Product fetched successfully!',
 				product: result,
 			});
@@ -83,34 +83,34 @@ const getProduct = (req, res, next) => {
 		.catch((error) => {
 			console.log('Product fetching failed:');
 			console.log(error);
-			res.status(500).json({
+			return res.status(500).json({
 				message: "Sorry! Product couldn't be fetched. Please try again.",
 			});
 		});
 };
 
-const getProducts = async (req, res, next) => {
-	let brandFilters = [];
-	let sellerFilters = [];
-	let categoryFilters = [];
-	let priceFilters = { currentPrice: {} };
+const getProducts = async (req, res) => {
+	const brandFilters = [];
+	const sellerFilters = [];
+	const categoryFilters = [];
+	const priceFilters = { currentPrice: {} };
 	let sortBy = null;
 
 	for (const key in req.query) {
 		if (
-			Object.hasOwnProperty.call(req.query, key) &&
-			key !== 'pageNum' &&
-			key !== 'pageSize'
+			Object.hasOwnProperty.call(req.query, key)
+			&& key !== 'pageNum'
+			&& key !== 'pageSize'
 		) {
 			if (key === 'brand') {
 				if (Array.isArray(req.query[key])) {
 					for (const brand of req.query[key]) {
-						let filter = {};
+						const filter = {};
 						filter[key] = brand;
 						brandFilters.push(filter);
 					}
 				} else {
-					let filter = {};
+					const filter = {};
 					filter[key] = req.query[key];
 					brandFilters.push(filter);
 				}
@@ -119,12 +119,12 @@ const getProducts = async (req, res, next) => {
 			if (key === 'seller') {
 				if (Array.isArray(req.query[key])) {
 					for (const seller of req.query[key]) {
-						let filter = {};
+						const filter = {};
 						filter[key] = seller;
 						sellerFilters.push(filter);
 					}
 				} else {
-					let filter = {};
+					const filter = {};
 					filter[key] = req.query[key];
 					sellerFilters.push(filter);
 				}
@@ -133,34 +133,33 @@ const getProducts = async (req, res, next) => {
 			if (key === 'category') {
 				if (Array.isArray(req.query[key])) {
 					for (const category of req.query[key]) {
-						let filter = {};
+						const filter = {};
 						filter[key] = category;
 						categoryFilters.push(filter);
 					}
 				} else {
-					let filter = {};
+					const filter = {};
 					filter[key] = req.query[key];
 					categoryFilters.push(filter);
 				}
 			}
 
 			if (key === 'sort') {
-				req.query[key] =
-					req.query[key] === 'price' ? 'currentPrice' : req.query[key];
+				req.query[key] = req.query[key] === 'price' ? 'currentPrice' : req.query[key];
 				sortBy = req.query[key];
 			}
 
 			if (key === 'minPrice') {
-				priceFilters.currentPrice['$gte'] = +req.query[key];
+				priceFilters.currentPrice.$gte = +req.query[key];
 			}
 
 			if (key === 'maxPrice') {
-				priceFilters.currentPrice['$lte'] = +req.query[key];
+				priceFilters.currentPrice.$lte = +req.query[key];
 			}
 		}
 	}
 
-	let filters = [];
+	const filters = [];
 	if (brandFilters.length) {
 		filters.push({ $or: brandFilters });
 	}
@@ -170,7 +169,7 @@ const getProducts = async (req, res, next) => {
 	if (categoryFilters.length) {
 		filters.push({ $or: categoryFilters });
 	}
-	if (priceFilters.currentPrice['$gte'] || priceFilters.currentPrice['$lte']) {
+	if (priceFilters.currentPrice.$gte || priceFilters.currentPrice.$lte) {
 		filters.push(priceFilters);
 	}
 
@@ -192,7 +191,7 @@ const getProducts = async (req, res, next) => {
 		const filteredProducts = await countQuery.exec();
 		const fetchedProducts = products.length;
 
-		res.status(200).json({
+		return res.status(200).json({
 			message: 'Products fetched successfully!',
 			products: products,
 			totalProducts: totalProducts,
@@ -202,15 +201,15 @@ const getProducts = async (req, res, next) => {
 	} catch (error) {
 		console.log('Products fetching failed:');
 		console.log(error);
-		res.status(500).json({
+		return res.status(500).json({
 			message: "Sorry! Products couldn't be fetched. Please try again.",
 		});
 	}
 };
 
-const deleteProduct = (req, res, next) => {
+const deleteProduct = (req, res) => {
 	Product.deleteOne({ _id: req.params.id })
-		.then((result) => {
+		.then(() => {
 			res.status(200).json({
 				message: 'Product deleted successfully!',
 			});
@@ -224,15 +223,15 @@ const deleteProduct = (req, res, next) => {
 		});
 };
 
-const getBrands = (req, res, next) => {
+const getBrands = (req, res) => {
 	Product.where('brand')
 		.ne(null)
 		.then((results) => {
-			let brands = new Set();
+			const brands = new Set();
 			for (const product of results) {
 				brands.add(product.brand);
 			}
-			res.status(201).json({
+			return res.status(201).json({
 				message: 'Brands fetched successfully!',
 				brands: [...brands],
 				totalBrands: brands.length,
@@ -241,13 +240,13 @@ const getBrands = (req, res, next) => {
 		.catch((error) => {
 			console.log('Brands fetching failed:');
 			console.log(error);
-			res.status(500).json({
+			return res.status(500).json({
 				message: "Sorry! Brands couldn't be fetched. Please try again.",
 			});
 		});
 };
 
-const addReview = (req, res, next) => {
+const addReview = (req, res) => {
 	const review = new Review({
 		reviewBy: req.body.reviewBy,
 		verifiedPurchase: req.body.verifiedPurchase,
@@ -262,21 +261,21 @@ const addReview = (req, res, next) => {
 					message: "Review couldn't be added! Please try again.",
 				});
 			}
-			review
+			return review
 				.save()
 				.then((result) => {
 					product.reviews.push(result._id);
 					product.save();
 					console.log('Review added successfully:');
 					console.log(result);
-					res.status(201).json({
+					return res.status(201).json({
 						message: 'Review added successfully!',
 					});
 				})
 				.catch((error) => {
 					console.log("Review couldn't be added:");
 					console.log(error);
-					res.status(500).json({
+					return res.status(500).json({
 						message: "Review couldn't be added! Please try again.",
 					});
 				});

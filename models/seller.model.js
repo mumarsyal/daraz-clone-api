@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-var sellerSchema = new mongoose.Schema({
+const sellerSchema = new mongoose.Schema({
 	name: { type: String, required: true },
 	positiveRatings: {
 		type: Number,

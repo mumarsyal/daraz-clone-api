@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Product = require('./product.model');
 
-var categorySchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
 	title: { type: String, required: true },
 	imagePath: { type: String, required: true },
 	products: [
@@ -24,10 +24,10 @@ categorySchema.pre('findOne', function (next) {
 });
 
 categorySchema.pre('deleteOne', function (next) {
-	categoryId = this.getQuery()['_id'];
+	const categoryId = this.getQuery()._id;
 	Product.updateMany(
 		{ category: categoryId },
-		{ $unset: { category: 1 } }
+		{ $unset: { category: 1 } },
 	).exec();
 	next();
 });

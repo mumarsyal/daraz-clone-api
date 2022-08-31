@@ -10,7 +10,8 @@ const productsRoutes = require('./routes/products.routes');
 
 const app = express();
 
-const MONGO_ATLAS_DB = `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}@cluster0.8boni.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`;
+const MONGO_ATLAS_DB = `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}
+					@cluster0.8boni.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`;
 
 mongoose
 	.connect(MONGO_ATLAS_DB)
@@ -30,11 +31,11 @@ app.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader(
 		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization',
 	);
 	res.setHeader(
 		'Access-Control-Allow-Methods',
-		'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+		'GET, POST, PATCH, PUT, DELETE, OPTIONS',
 	);
 	next();
 });

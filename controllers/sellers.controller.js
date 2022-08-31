@@ -1,6 +1,6 @@
 const Seller = require('../models/seller.model');
 
-const addSeller = (req, res, next) => {
+const addSeller = (req, res) => {
 	const seller = new Seller({
 		name: req.body.name,
 	});
@@ -22,7 +22,7 @@ const addSeller = (req, res, next) => {
 		});
 };
 
-const getSeller = (req, res, next) => {
+const getSeller = (req, res) => {
 	Seller.findOne({ _id: req.params.id })
 		.then((result) => {
 			console.log('Seller fetched successfully:');
@@ -41,7 +41,7 @@ const getSeller = (req, res, next) => {
 		});
 };
 
-const getSellers = (req, res, next) => {
+const getSellers = (req, res) => {
 	const query = Seller.find();
 	let sellers;
 

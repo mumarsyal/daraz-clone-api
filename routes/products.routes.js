@@ -12,7 +12,7 @@ router.get('/:id', productsController.getProduct);
 router.delete(
 	'/:id',
 	authVerificationMiddleware,
-	productsController.deleteProduct
+	productsController.deleteProduct,
 );
 router.post('/reviews/new', productsController.addReview);
 

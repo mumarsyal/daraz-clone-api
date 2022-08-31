@@ -1,44 +1,47 @@
 {
-    "env": {
-        "commonjs": true,
-        "es2021": true,
-        "node": true
-    },
-    "extends": "airbnb-base",
-    "overrides": [
-    ],
-    "parserOptions": {
-        "ecmaVersion": "latest"
-    },
-    "rules": {
-      "linebreak-style": ["error", "windows"],
-      "max-len": ["warn", 120],
-      "func-names": "off",
-      "indent": ["error", "tab", {"SwitchCase": 1}],
-      "no-param-reassign": ["error", { "props": false }],
-      "brace-style": ["error", "1tbs"],
-      "strict": "off",
-      "curly": "off",
-      "quote-props": "off",
-      "arrow-body-style": "off",
-      "new-cap": ["error", { "capIsNew": false }],
-      "prefer-rest-params": "off", // better disable it and upgrade to node 6.x everywhere
-      "no-empty": ["error", { "allowEmptyCatch": true }],
-      "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
-      "no-console": "off",
-      "comma-dangle": "warn",
-      "no-inner-declarations": "off",
-      "jsx-a11y/label-has-for": "off",
-      "import/no-unresolved": "off",
-      "import/no-extraneous-dependencies": "off",
-      "react/require-extension": "off",
-      "no-tabs": "off",
-      "lines-around-directive": "off",
-      "arrow-parens": "off",
-      "space-before-blocks": "off",
-      "no-plusplus": "off",
-      "spaced-comment": "off",
-      "import/no-named-as-default": "off",
-      "import/extensions": "off"
-    }
+	"env": {
+		"commonjs": true,
+		"es2021": true,
+		"node": true
+	},
+	"extends": "airbnb-base",
+	"overrides": [
+	],
+	"parserOptions": {
+		"ecmaVersion": "latest"
+	},
+	"rules": {
+		"linebreak-style": ["error", "windows"],
+		"max-len": ["warn", 120],
+		"func-names": "off",
+		"indent": ["error", "tab", {"SwitchCase": 1}],
+		"no-param-reassign": ["error", { "props": false }],
+		"brace-style": ["error", "1tbs"],
+		"strict": "off",
+		"curly": "off",
+		"quote-props": "off",
+		"arrow-body-style": "off",
+		"new-cap": ["error", { "capIsNew": false }],
+		"prefer-rest-params": "off", // better disable it and upgrade to node 6.x everywhere
+		"no-empty": ["error", { "allowEmptyCatch": true }],
+		"prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
+		"no-console": "off",
+		"comma-dangle": "warn",
+		"no-inner-declarations": "off",
+		"jsx-a11y/label-has-for": "off",
+		"import/no-unresolved": "off",
+		"import/no-extraneous-dependencies": "off",
+		"react/require-extension": "off",
+		"no-tabs": "off",
+		"lines-around-directive": "off",
+		"arrow-parens": "off",
+		"space-before-blocks": "off",
+		"no-plusplus": "off",
+		"spaced-comment": "off",
+		"import/no-named-as-default": "off",
+		"import/extensions": "off",
+		"no-underscore-dangle": "off",
+		"object-shorthand": "off",
+		"no-restricted-syntax": "warn"
+	}
 }

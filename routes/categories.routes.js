@@ -11,7 +11,7 @@ router.get('/:id', categoriesController.getCategory);
 router.delete(
 	'/:id',
 	authVerificationMiddleware,
-	categoriesController.deleteCategory
+	categoriesController.deleteCategory,
 );
 
 module.exports = router;
