@@ -5,7 +5,8 @@
 	"main": "server.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified yet!\"",
-		"start": "node server.js"
+		"start": "node server.js",
+		"lint:teamcity": "eslint ./**/*.js --format teamcity"
 	},
 	"author": "",
 	"license": "ISC",
@@ -19,5 +20,17 @@
 		"mongoose": "^6.1.6",
 		"mongoose-unique-validator": "^3.0.0",
 		"multer": "^1.4.4"
+	},
+	"devDependencies": {
+		"eslint": "^8.23.0",
+		"eslint-config-airbnb-base": "^15.0.0",
+		"eslint-formatter-teamcity": "^1.0.0",
+		"eslint-plugin-import": "^2.26.0"
+	},
+	"eslint-formatter-teamcity": {
+		"reporter": "inspections",
+		"report-name": "ESLint Violations",
+		"error-statistics-name": "ESLint Error Count",
+		"warning-statistics-name": "ESLint Warning Count"
 	}
 }
