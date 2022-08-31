@@ -4,7 +4,7 @@
 	"description": "APIs for Daraz Clone Project",
 	"main": "server.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified yet!\"",
+		"test": "jest",
 		"start": "node server.js",
 		"lint:teamcity": "eslint ./**/*.js --format teamcity"
 	},
@@ -16,10 +16,12 @@
 		"dotenv": "^14.1.0",
 		"email-validator": "^2.0.4",
 		"express": "^4.17.2",
+		"jest": "^29.0.1",
 		"jsonwebtoken": "^8.5.1",
 		"mongoose": "^6.1.6",
 		"mongoose-unique-validator": "^3.0.0",
-		"multer": "^1.4.4"
+		"multer": "^1.4.4",
+		"supertest": "^6.2.4"
 	},
 	"devDependencies": {
 		"eslint": "^8.23.0",
