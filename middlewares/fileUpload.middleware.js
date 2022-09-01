@@ -18,6 +18,14 @@ const storage = multer.diskStorage({
 		const fileName = `${origName}-${Date.now()}.${ext}`;
 		cb(null, fileName);
 	},
+	limits: {
+		fileSize: 8000000,
+	},
 });
 
-module.exports = multer({ storage: storage }).array('images', 10);
+module.exports = multer({
+	storage: storage,
+	limits: {
+		fileSize: 8000000,
+	},
+}).array('images', 10);

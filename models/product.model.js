@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 
 const productSchema = mongoose.Schema({
 	title: { type: String, required: true },
 	thumbnail: { type: String, required: true },
-	rating: { type: Number, default: () => Math.random() * 5 },
-	noOfRatings: { type: Number, default: () => Math.round(Math.random() * 100) },
+	rating: { type: Number, default: () => crypto.randomInt(0, 6) },
+	noOfRatings: { type: Number, default: () => crypto.randomInt(0, 101) },
 	noOfQuesAsked: { type: Number, default: 0 },
 	noOfQuesAnswered: { type: Number, default: 0 },
 	brand: { type: String, default: null },

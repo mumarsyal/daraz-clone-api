@@ -10,7 +10,9 @@ const addProduct = (req, res) => {
 			return res.status(500).json({
 				message: 'Sorry! Image could not be uploaded. Please try again.',
 			});
-		} if (err) {
+		}
+
+		if (err) {
 			return res.status(422).json({
 				message: 'Invalid file type',
 			});

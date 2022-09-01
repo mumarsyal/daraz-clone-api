@@ -9,6 +9,7 @@ const sellersRoutes = require('./routes/sellers.routes');
 const productsRoutes = require('./routes/products.routes');
 
 const app = express();
+app.disable('x-powered-by');
 
 const MONGO_ATLAS_DB = `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}
 					@cluster0.8boni.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`;
