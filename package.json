@@ -29,6 +29,7 @@
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-formatter-teamcity": "^1.0.0",
 		"eslint-plugin-import": "^2.26.0",
+		"jest-sonar-reporter": "^2.0.0",
 		"jest-teamcity-reporter": "^0.9.0"
 	},
 	"eslint-formatter-teamcity": {

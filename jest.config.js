@@ -2,7 +2,8 @@ module.exports = {
 	testMatch: [
 		'<rootDir>/tests/*.test.js',
 	],
-	coverageReporters: ['lcov'],
+	coverageReporters: ['json', 'lcov'],
 	coverageDirectory: '<rootDir>/coverage',
-	testResultsProcessor: 'jest-teamcity-reporter',
+	// testResultsProcessor: 'jest-teamcity-reporter',
+	testResultsProcessor: 'jest-sonar-reporter',
 };

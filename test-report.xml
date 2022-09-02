@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="G:\Learning\Github\daraz-clone-api\tests\sellers.test.js">
+    <testCase name="Sellers should add an item to sellers table" duration="286"/>
+    <testCase name="Sellers should get an item from sellers table" duration="86"/>
+    <testCase name="Sellers should get all items from sellers table" duration="184"/>
+  </file>
+</testExecutions>
