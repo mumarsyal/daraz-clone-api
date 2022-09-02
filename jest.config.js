@@ -4,7 +4,7 @@ module.exports = {
 	],
 	collectCoverage: true,
 	collectCoverageFrom: ['**/*.js'],
-	coverageReporters: ['json', 'lcov'],
+	coverageReporters: ['json', 'lcov', 'teamcity'],
 	coverageDirectory: '<rootDir>/coverage',
 	coverageThreshold: {
 		global: {
