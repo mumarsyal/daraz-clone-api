@@ -4,4 +4,5 @@ module.exports = {
 	],
 	coverageReporters: ['lcov'],
 	coverageDirectory: '<rootDir>/coverage',
+	testResultsProcessor: 'jest-teamcity-reporter',
 };

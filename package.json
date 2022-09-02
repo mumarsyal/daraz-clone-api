@@ -36,8 +36,5 @@
 		"report-name": "ESLint Violations",
 		"error-statistics-name": "ESLint Error Count",
 		"warning-statistics-name": "ESLint Warning Count"
-	},
-	"jest": {
-    "testResultsProcessor": "jest-teamcity-reporter"
 	}
 }
