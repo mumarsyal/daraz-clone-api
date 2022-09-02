@@ -4,6 +4,14 @@ module.exports = {
 	],
 	coverageReporters: ['json', 'lcov'],
 	coverageDirectory: '<rootDir>/coverage',
-	// testResultsProcessor: 'jest-teamcity-reporter',
-	testResultsProcessor: 'jest-sonar-reporter',
+	coverageThreshold: {
+		global: {
+			branches: 0,
+			functions: 0,
+			lines: 0,
+			statements: 0,
+		},
+	},
+	testResultsProcessor: 'jest-teamcity-reporter',
+	// testResultsProcessor: 'jest-sonar-reporter',
 };
