@@ -4,6 +4,13 @@ module.exports = {
 	],
 	collectCoverage: true,
 	collectCoverageFrom: ['**/*.js'],
+	coveragePathIgnorePatterns: [
+		'node_modules',
+		'coverage',
+		'.scannerwork',
+		'.vscode',
+		'tests',
+	],
 	coverageReporters: ['json', 'lcov', 'teamcity'],
 	coverageDirectory: '<rootDir>/coverage',
 	coverageThreshold: {
