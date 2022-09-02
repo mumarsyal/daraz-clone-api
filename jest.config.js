@@ -2,6 +2,8 @@ module.exports = {
 	testMatch: [
 		'<rootDir>/tests/*.test.js',
 	],
+	collectCoverage: true,
+	collectCoverageFrom: ['**/*.js'],
 	coverageReporters: ['json', 'lcov'],
 	coverageDirectory: '<rootDir>/coverage',
 	coverageThreshold: {
