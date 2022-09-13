@@ -11,6 +11,20 @@ exports.signup = (req, res, next) => {
 		});
 	}
 
+	if (!req.body.firstName) {
+		return res.status(422).json({
+			message: 'First name is required',
+			errorField: 'FirstName',
+		});
+	}
+
+	if (!req.body.lastName) {
+		return res.status(422).json({
+			message: 'Last name is required',
+			errorField: 'LastName',
+		});
+	}
+
 	User.findOne({ email: req.body.email }).then((user) => {
 		if (user) {
 			return res.status(409).json({
