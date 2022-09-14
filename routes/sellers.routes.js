@@ -6,7 +6,7 @@ const sellersController = require('../controllers/sellers.controller');
 const authVerificationMiddleware = require('../middlewares/authVerification.middleware');
 
 router.post('', authVerificationMiddleware, sellersController.addSeller);
-router.get('', sellersController.getSellers);
-router.get('/:id', sellersController.getSeller);
+router.get('', authVerificationMiddleware, sellersController.getSellers);
+router.get('/:id', authVerificationMiddleware, sellersController.getSeller);
 
 module.exports = router;
