@@ -40,12 +40,4 @@ describe('Users', () => {
 		expect(response.statusCode).toBe(401);
 		expect(response.body.message).toBe('Invalid password!');
 	});
-
-	test('should say unknown error', async () => {
-		const response = await request(baseURL)
-			.post('/login')
-			.send();
-		expect(response.statusCode).toBe(500);
-		expect(response.body.message).toBe('Sorry! An unknown error occured while logging in!');
-	});
 });
