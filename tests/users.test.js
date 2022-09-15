@@ -5,15 +5,15 @@ const baseURL = 'http://localhost:3000/api/users';
 describe('Users', () => {
 	const correctUser = {
 		'email': 'a@a.aa',
-    'password': '1234'
+		'password': '1234',
 	};
 	const wrongEmail = {
 		'email': 'a@a.aaaaaaaa',
-    'password': '1234'
+		'password': '1234',
 	};
 	const wrongPass = {
 		'email': 'a@a.aa',
-    'password': '1234333333333'
+		'password': '1234333333333',
 	};
 
 	test('should successfully login a user', async () => {
