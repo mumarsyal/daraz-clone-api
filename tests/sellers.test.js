@@ -1,6 +1,6 @@
 const request = require('supertest');
 
-const baseURL = 'http://localhost:3000/api';
+const baseURL = 'https://daraz-hazelsoft.herokuapp.com/api';
 
 describe('Sellers', () => {
 	const seller = {

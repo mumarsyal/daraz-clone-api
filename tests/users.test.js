@@ -1,6 +1,6 @@
 const request = require('supertest');
 
-const baseURL = 'http://localhost:3000/api/users';
+const baseURL = 'https://daraz-hazelsoft.herokuapp.com/api/users';
 
 describe('Users', () => {
 	const correctUser = {
