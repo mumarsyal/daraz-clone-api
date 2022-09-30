@@ -41,7 +41,7 @@ const getSeller = (req, res, next) => {
 		});
 };
 
-const getSellers = (req, res, next) => {
+const getAllSellers = (req, res) => {
 	const query = Seller.find();
 	let sellers;
 
@@ -55,6 +55,37 @@ const getSellers = (req, res, next) => {
 				message: 'Sellers fetched successfully!',
 				sellers: sellers,
 				totalSellers: count,
+			});
+		})
+		.catch((error) => {
+			console.log('Sellers fetching failed:');
+			console.log(error);
+			res.status(500).json({
+				message: "Sorry! Sellers couldn't be fetched. Please try again.",
+			});
+		});
+};
+
+const getSellers = (req, res) => {
+	const pageNum = req.query.pageNum ? +req.query.pageNum : 1;
+	const pageSize = req.query.pageSize ? +req.query.pageSize : 10;
+
+	const query = Seller.find().skip(pageSize * (pageNum - 1)).limit(pageSize);
+
+	let sellers;
+
+	query
+		.then((results) => {
+			sellers = results;
+			return Seller.count();
+		})
+		.then((count) => {
+			res.status(200).json({
+				message: 'Sellers fetched successfully!',
+				sellers: sellers,
+				totalSellers: count,
+				pageNum: pageNum,
+				pageSize: pageSize,
 			});
 		})
 		.catch((error) => {
