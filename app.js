@@ -48,3 +48,5 @@ app.use('/api/sellers', sellersRoutes);
 app.use('/api/products', productsRoutes);
 
 module.exports = app;
+
+// sonarqube test
